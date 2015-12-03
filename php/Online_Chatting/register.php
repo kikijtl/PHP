@@ -7,6 +7,7 @@ $message = NULL;
 if(isset($_POST['Register'])){
 	$message = NULL;
 
+	// Check username.
 	if(empty($_POST['username'])){
 		$username = FALSE;
 		$message .='Username is required.<br>';
@@ -14,6 +15,7 @@ if(isset($_POST['Register'])){
 		$username = $_POST['username'];
 	}
 
+	// Check password.
 	if(empty($_POST['password'])){
 		$password = FALSE;
 		$message .='Password is required.<br>';
@@ -26,6 +28,7 @@ if(isset($_POST['Register'])){
 		}
 	}
 
+	// Check username and password correctness.
 	if($username&&$password){
 		$db = mysqli_connect("localhost","root","1234","gossip_chat");
 

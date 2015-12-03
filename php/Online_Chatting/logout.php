@@ -2,14 +2,14 @@
 
 // verify user
 session_start();
-$username = $_GET['username'];
+$username = $_POST['username'];
 
 if (!isset($_SESSION['username'][$username])) {
 	header("location:login.php");
 }
 
 // start handling request
-if (empty($_GET['username'])){
+if (empty($_POST['username'])){
 	http_response_code(400);
 } else {
 	$db = mysqli_connect("localhost","root","1234","gossip_chat");
@@ -28,7 +28,5 @@ if (empty($_GET['username'])){
 	}
 
 }
-
-//echo $_SERVER['REQUEST_URI'];
 
 ?>

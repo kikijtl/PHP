@@ -1,6 +1,6 @@
 <?php
 
-// verify user
+// verify user.
 session_start();
 $username = $_GET['username'];
 
@@ -98,12 +98,33 @@ mysqli_close($db);
 		}
 		#friendList {
 			width: 100%;
-			height: 492px;
+			height: 482px;
 			border-bottom-style: ridge;
+			overflow-y: auto;
+		}
+		#friendRequest {
+			width: 100%;
+			height: 30px;
+			position: absolute;
+			bottom: 31px;
+			border-bottom-style: ridge;
+			background-color: #ffaa80;
+			border-width: 1px;
+			text-align: center;
+			color: #800000;
+			line-height: 30px;
+			cursor: pointer;
+			visibility: hidden;
+		}
+		#unread_friendRequest {
+			height: 10px;
+			width: 10px;
+			marginLeft: 10px;
+			visibility: hidden;
 		}
 		#addFriend {
 			width: 100%;
-			height: 50px;
+			height: 30px;
 			position: absolute;
 			bottom: 0px;
 			border-style: solid;
@@ -116,8 +137,7 @@ mysqli_close($db);
 			color: #800000;
 			border-style: none;
 			font-family: "Comic Sans MS", cursive, sans-serif;
-			font-size: 18px;
-			font-weight: bold;
+			font-size: 17px;
 			cursor: pointer;
 		}
 		#rightDiv {
@@ -168,7 +188,7 @@ mysqli_close($db);
 		#content {
 			width: 100%;
 			height: 350px;
-			overflow-y: scroll;
+			overflow-y: auto;
 		}
 		#typing {
 			width: 100%;
@@ -212,6 +232,9 @@ mysqli_close($db);
 		</div>
 		<div id="friendListTitle" onclick="hideRightDiv()">My Friends</div>
 		<div id="friendList"></div>
+		<div id="friendRequest">Friend Request
+			<img id="unread_friendRequest" src="pics/unread.png">
+		</div>
 		<div id="addFriend"><button id="addFriendBtn" onclick="addFriend()">Add A New Friend</button></div>
 	</div>
 	<div id="rightDiv">
@@ -263,7 +286,7 @@ mysqli_close($db);
 
 		function getNewMessages(){
 			var username = <?php echo json_encode($username); ?>;
-			var url = "log.php";
+			var url = "message.php";
 			var param = "?toUser=" + username + "&timeout=1";
 			url = url + param;
 			var ajax = new XMLHttpRequest();
@@ -310,6 +333,8 @@ mysqli_close($db);
 			sendBtn.onclick = function(){sendMessage();};
 			var typingArea = document.getElementById("typingArea");
 			typingArea.value = "";
+			var unread = document.getElementById("unread_" + friendName);
+			showHistory(friendName);
 			showUnreadMessages(friendName);
 		}
 
@@ -329,7 +354,7 @@ mysqli_close($db);
 				p.style.marginBottom = "0";
 				p.style.color = "#800000";
 				content.scrollTop = content.scrollHeight;
-				var url = "log.php";
+				var url = "message.php";
 				var params = "setRead=1&timestamp=" + tmp["timestamp"] + "&fromUser=" + tmp["fromUser"] + "&toUser=" + tmp["toUser"];
 				var ajax = new XMLHttpRequest();
 				ajax.open("POST", url, true);
@@ -339,6 +364,36 @@ mysqli_close($db);
 			var tmpFrom = "unread_" + friendName;
 			var icon = document.getElementById(tmpFrom);
 			icon.style.visibility = "hidden";
+		}
+
+		function showHistory(friendName){
+			var fromUser = "<?php echo $username?>";
+			var toUser = document.getElementById("sessionName").innerHTML;
+			var params = "fromUser=" + fromUser + "&toUser=" + toUser;
+			var url = "history.php" + "?" + params;
+			var ajax = new XMLHttpRequest();
+			ajax.onreadystatechange = function() {
+				if(ajax.readyState == 4 && ajax.status == 200) {
+					var history = JSON.parse(ajax.responseText);
+					for (i = 0; i < history.length; i++){
+						var tmp = JSON.parse(history[i]);
+						var p = document.createElement("p");
+						var tmpDate = new Date(Number(tmp["timestamp"]));
+						var localTime = tmpDate.toLocaleString();
+						p.innerHTML = "[" + localTime + "] " + tmp["fromUser"] + " says: " + tmp["message"];
+						var content = document.getElementById("content");
+						content.appendChild(p);
+						p.style.width = "80%";
+						p.style.marginLeft = "8px";
+						p.style.marginTop = "2px";
+						p.style.marginBottom = "0";
+						p.style.color = "#800000";
+						content.scrollTop = content.scrollHeight;
+					}
+				}
+			};
+			ajax.open("GET", url, false);
+			ajax.send();
 		}
 
 		function unfriend(){
@@ -381,7 +436,7 @@ mysqli_close($db);
 		function logout(){
 			var username = "<?php echo $username?>";
 			var param = "username=" + username;
-			var url = "logout.php?" + param;
+			var url = "logout.php";
 			var ajax = new XMLHttpRequest();
 			ajax.onreadystatechange = function() {
 				if (ajax.readyState == 4 && ajax.status == 200) {
@@ -389,8 +444,9 @@ mysqli_close($db);
 					window.location.href = "login.php";
 				}
 			}
-			ajax.open("GET", url, true);
-			ajax.send();
+			ajax.open("POST", url, true);
+			ajax.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+			ajax.send(param);
 		}
 
 		function addFriend(){
@@ -468,7 +524,7 @@ mysqli_close($db);
 			if (message == ""){
 				alert("Please enter your message.");
 			} else {
-				var url = "log.php";
+				var url = "message.php";
 				var date = new Date();
 				var timestamp = date.getTime();
 				var fromUser = "<?php echo $username?>";
