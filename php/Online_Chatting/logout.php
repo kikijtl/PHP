@@ -17,7 +17,7 @@ if (empty($_POST['username'])){
 		http_response_code(500);
 		echo '<p color="red">Connect Error. Please try again.</p>';
 	}
-
+	// Remove user from active_user table and $_SESSION.
 	$query = "delete from active_user where username='$username'";
 	$result = mysqli_query($db, $query);
 	if ($result){

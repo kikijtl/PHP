@@ -4,6 +4,7 @@ $message = NULL;
 if(isset($_POST['Login'])){
 	$message = NULL;
 
+	// Check if the input areas are empty.
 	if(empty($_POST['username'])){
 		$username = FALSE;
 		$message .='User name is required.<br>';
@@ -18,6 +19,7 @@ if(isset($_POST['Login'])){
 		$password = $_POST['password'];
 	}
 
+	// Check if username and password match.
 	if($username&&$password){
 		$db = mysqli_connect("localhost","root","1234","gossip_chat");
 
@@ -63,57 +65,7 @@ if(isset($_POST['Login'])){
 <html>
 <head>
 	<title>Gossip</title>
-	<style>
-		h1 {
-			margin-bottom: 30px;
-		}
-		h2 {
-			margin-bottom: 25px;
-		}
-		div {
-			color: #ff4d4d;
-			text-align: center;
-			size: 100%;
-			font-family: "Comic Sans MS", cursive, sans-serif;
-		}
-		form {
-			font-size: 20px;
-		}
-		p {
-			margin-bottom: 10px;
-		}
-		input {
-			width: 150px;
-			height: 20px;
-			color: #ff4d4d;
-			font-family: "Comic Sans MS", cursive, sans-serif;
-			font-size: 15px;
-			border-style: solid;
-			border-color: #ff9999;
-		}
-		#loginBtn {
-			margin-top: 20px;
-			width: 100px;
-			height: 50px;
-			font-size: 23px;
-			background-color: #ff4d4d;
-			color: #ffffff;
-			border-color: #ff4d4d;
-			margin-bottom: 15px;
-		}
-		#msg {
-			color: #660033;
-			font-size: 15px;
-			font: bold;
-		}
-		a {
-			font-size: 15px;
-			color: #ff9999;
-		}
-		#footer {
-			margin-top: 50px;
-		}
-	</style>
+	<link rel="stylesheet" type="text/css" href="css/login.css">
 </head>
 <body>
 	<div>

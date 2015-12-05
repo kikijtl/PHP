@@ -2,19 +2,19 @@
 
 // verify user
 session_start();
-$username = $_GET['fromUser'];
+$username = $_POST['fromUser'];
 
 if (!isset($_SESSION['username'][$username])) {
 	header("location:login.php");
 }
 
 // start handling request
-if (empty($_GET['toUser'])){
+if (empty($_POST['toUser'])){
 	http_response_code(400);
 	echo "ERROR: Please enter your friend's username.";
 } else {
-	$fromUser = $_GET['fromUser'];
-	$toUser = $_GET['toUser'];
+	$fromUser = $_POST['fromUser'];
+	$toUser = $_POST['toUser'];
 
 	if (isset($fromUser) && isset($toUser)){
 		// Check adding self as a friend.
@@ -54,15 +54,15 @@ if (empty($_GET['toUser'])){
 			exit();
 		}
 
-		// Update friendship.
-		$query = "insert into friendship values ('$fromUser', '$toUser')";
+		// Insert the friend request into log table
+		$query = "insert into log values (0, '$fromUser', '$toUser', 'pending', 1)";
 		$result = mysqli_query($db, $query);
 		if ($result){
 			http_response_code(200);
-			echo "$fromUser, you are now $toUser's friend.";
+			echo "$fromUser, your friend request has been sent to $toUser.";
 		} else {
 			http_response_code(400);
-			echo "Some error occurred. Please try again.";
+			echo "$fromUser, your friend request has already been sent to $toUser.";
 		}
 		mysqli_close($db);
 	}

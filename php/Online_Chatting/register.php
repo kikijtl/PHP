@@ -63,55 +63,7 @@ if(isset($_POST['Register'])){
 <html>
 <head>
 	<title>Register</title>
-	<style>
-		h1 {
-			margin-bottom: 30px;
-		}
-		div {
-			color: #ff4d4d;
-			text-align: center;
-			size: 100%;
-			font-family: "Comic Sans MS", cursive, sans-serif;
-		}
-		form {
-			font-size: 20px;
-		}
-		p {
-			margin-bottom: 10px;
-		}
-		input {
-			width: 150px;
-			height: 20px;
-			color: #ff4d4d;
-			font-family: "Comic Sans MS", cursive, sans-serif;
-			font-size: 15px;
-			border-style: solid;
-			border-color: #ff9999;
-		}
-		#info {
-			font-size: 12px;
-		}
-		#registerBtn {
-			margin-top: 20px;
-			width: 110px;
-			height: 50px;
-			font-size: 23px;
-			background-color: #ff4d4d;
-			color: #ffffff;
-			border-color: #ff4d4d;
-			margin-bottom: 15px;
-			text-align: center;
-		}
-		#msg {
-			color: #660033;
-			font-size: 15px;
-			font: bold;
-		}
-		a {
-			font-size: 15px;
-			color: #ff9999;
-		}
-	</style>
+	<link rel="stylesheet" type="text/css" href="css/register.css">
 </head>
 
 <body>

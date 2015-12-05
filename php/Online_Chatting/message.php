@@ -6,7 +6,6 @@ $username = null;
 $method = $_SERVER['REQUEST_METHOD'];
 
 if ($method == "GET"){
-//	$fromUser = $_GET['fromUser'];
 	$toUser = $_GET['toUser'];
 	$username = $toUser;
 } elseif ($method == "POST"){
@@ -84,7 +83,6 @@ if ($method == "POST"){
 function getUnread($timeout, $username, $newMessages) {
 	$i = 0;
 	while ($i < $timeout){
-//		sleep(1);
 		$i++;
 
 		$db = mysqli_connect("localhost","root","1234","gossip_chat");
@@ -97,7 +95,6 @@ function getUnread($timeout, $username, $newMessages) {
 		$result = mysqli_query($db, $query);
 		$rowcount = mysqli_num_rows($result);
 		if ($rowcount == 0){
-//			echo $rowcount;
 			continue;
 		}
 		while ($row=mysqli_fetch_array($result)){
